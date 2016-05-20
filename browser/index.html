@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Juke</title>
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="/bootstrap-dark.css" rel="stylesheet" />
+    <link href="/style.css" rel="stylesheet" />
+    <script src="/angular/angular.js" defer></script>
+    <script src="/js/module.js" defer></script>
+    <script src="/js/album/album.controllers.js" defer></script>
+    <script src="/js/album/album.factory.js" defer></script>
+    <script src="/js/player/player.controller.js" defer></script>
+    <script src="/js/player/player.factory.js" defer></script>
+    <script src="/js/sidebar/sidebar.controller.js" defer></script>
+    <script src="/js/artist/artist.controllers.js" defer></script>
+    <script src="/js/artist/artist.factory.js" defer></script>
+    <script src="/js/song/song.factory.js" defer></script>
+  </head>
+  <body ng-app="juke">
+    <div id="main" class="container-fluid">
+
+      <div class="col-xs-2">
+        <sidebar ng-controller="SidebarCtrl">
+          <img src="juke.svg" class="logo">
+          <section>
+            <h4 class="menu-item active">
+              <a href="#" ng-click="viewAlbums()">ALBUMS</a>
+            </h4>
+          </section>
+          <section>
+            <h4 class="menu-item">
+              <a ng-click="viewAllArtists()" href="#">ARTISTS</a>
+            </h4>
+          </section>
+        </sidebar>
+      </div>
+
+      <div class="col-xs-10">
+
+        <div ng-controller="AlbumsCtrl" ng-show="showMe">
+          <h3>Albums</h3>
+          <div class="row">
+            <div class="col-xs-4" ng-repeat="album in albums">
+              <a class="thumbnail" href="#" ng-click="viewOneAlbum(album)">
+                <img ng-src="{{ album.imageUrl }}">
+                <div class="caption">
+                  <h5>
+                    <span>{{ album.name }}</span>
+                  </h5>
+                  <small>{{ album.songs.length }} songs</small>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="album" ng-controller="AlbumCtrl" ng-show="showMe">
+          <p>
+            <h3>{{ album.name }}</h3>
+            <img ng-src="{{ album.imageUrl }}" class="img-thumbnail">
+          </p>
+          <table class='table'>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Artists</th>
+                <th>Genres</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="song in album.songs" ng-class="{active: song === getCurrentSong() }">
+                <td>
+                  <button class="btn btn-default btn-xs" ng-click="toggle(song)">
+                    <span class="glyphicon" ng-class="{ 'glyphicon-pause': isPlaying(song), 'glyphicon-play': !isPlaying(song) }"></span>
+                  </button>
+                </td>
+                <td>{{ song.name }}</td>
+                <td><span ng-repeat="artist in song.artists">{{ artist.name }}{{ $last ? '' : ', ' }}</span></td>
+                <td>{{ song.genres.join(', ') }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div ng-show="showMe" ng-controller="ArtistsCtrl">
+          <h3>Artists</h3>
+            <div class="list-group">
+              <div class="list-group-item" ng-repeat="artist in artists">
+              <a href="#" ng-click="viewOneArtist(artist)">{{ artist.name }}</a>
+            </div>
+          </div>
+        </div>
+
+        <div ng-show="showMe" ng-controller="ArtistCtrl">
+            <h3>{{ artist.name }}</h3>
+            <h3>Albums</h3>
+            <div class="row">
+              <div class="col-xs-4" ng-repeat="album in artist.albums">
+                <a class="thumbnail" href="#" ng-click="viewOneAlbum(album)">
+                  <img ng-src="{{ album.imageUrl }}">
+                  <div class="caption">
+                    <h5>
+                      <span>{{ album.name }}</span>
+                    </h5>
+                    <small>{{ album.songs.length }} songs</small>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <table class='table'>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Artists</th>
+                  <th>Genres</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="song in artist.songs" ng-class="{active: song === getCurrentSong() }">
+                  <td>
+                    <button class="btn btn-default btn-xs" ng-click="toggle(song)">
+                      <span class="glyphicon" ng-class="{ 'glyphicon-pause': isPlaying(song), 'glyphicon-play': !isPlaying(song) }"></span>
+                    </button>
+                  </td>
+                  <td>{{ song.name }}</td>
+                  <td><span ng-repeat="artist in song.artists">{{ artist.name }}{{ $last ? '' : ', ' }}</span></td>
+                  <td>{{ song.genres.join(', ') }}</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+      </div>
+
+      <footer>
+        <div ng-show="getCurrentSong()" ng-controller="PlayerCtrl">
+          <div class="pull-left">
+            <button class="btn btn-default" ng-click="previous()">
+              <span class="glyphicon glyphicon-step-backward"></span>
+            </button>
+            <button class="btn btn-default" ng-click="toggle()">
+              <span class="glyphicon" ng-class="{'glyphicon-pause': isPlaying(), 'glyphicon-play': !isPlaying()}"></span>
+            </button>
+            <button class="btn btn-default" ng-click="next()">
+              <span class="glyphicon glyphicon-step-forward"></span>
+            </button>
+          </div>
+          <div class="bar">
+            <div class="progress">
+              <div class="progress-bar" ng-style="{width: getPercent() + '%'}"></div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </body>
+</html>
