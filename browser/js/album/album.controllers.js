@@ -4,17 +4,14 @@
 
 juke.controller('AlbumCtrl', function ($scope, $log, PlayerFactory, AlbumFactory, $stateParams) {
   $log.info($stateParams.id)
-  $scope.$on('viewSwap', function (event, data) {
-    if (data.name !== 'oneAlbum') return $scope.showMe = false;
-    $scope.showMe = true;
-    AlbumFactory.fetchById(data.id)
+    AlbumFactory.fetchById($stateParams.id)
     .then(function (album) {
       $scope.album = album;
-      $log.info($scope.album)
+      $log.info("ALBUM",$scope.album)
 
     })
     .catch($log.error);
-  });
+
 
   // main toggle
   $scope.toggle = function (song) {
@@ -49,7 +46,7 @@ juke.controller('AlbumsCtrl', function ($scope, $log, $rootScope, $stateParams, 
 
   // $scope.albumId = $stateParams.id
   $scope.viewOneAlbum = function (album) {
-    $rootScope.$broadcast('viewSwap', { name: 'oneAlbum',  id: album.id }); ////id: $stateParams.id});
+    // $rootScope.$broadcast('viewSwap', { name: 'oneAlbum',  id: $stateParams.id}); // id: album.id });
   };
 
   AlbumFactory.fetchAll()

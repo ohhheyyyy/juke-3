@@ -9,7 +9,7 @@ juke.config(function ($stateProvider) {
     controller: 'AlbumsCtrl'
   });
   $stateProvider.state('artistsList', {
-    url: '/artists/:id',
+    url: '/artists/',
     templateUrl: '../artists.html',
     controller: 'ArtistsCtrl'
   });
@@ -17,5 +17,10 @@ juke.config(function ($stateProvider) {
     url:'/albums/:id',
     templateUrl: '../album.html',
     controller: 'AlbumCtrl'
-  })
+  });
+  $stateProvider.state('artistList',{
+    url:'/artists/:id',
+    templateUrl: '../artist.html',
+    controller: 'ArtistCtrl'
+  });
 });
