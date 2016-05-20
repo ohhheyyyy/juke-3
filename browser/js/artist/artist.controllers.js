@@ -9,13 +9,14 @@ juke.controller('ArtistsCtrl', function ($scope, $log, $rootScope, ArtistFactory
     $scope.showMe = true;
   });
 
-  $scope.viewOneArtist = function (artist) {
+    $scope.viewOneArtist = function (artist) {
     $rootScope.$broadcast('viewSwap', { name: 'oneArtist', id: artist.id });
   };
 
   ArtistFactory.fetchAll()
   .then(function (artists) {
     $scope.artists = artists;
+    $log.info($scope.artists);
   })
   .catch($log.error);
 
@@ -23,7 +24,7 @@ juke.controller('ArtistsCtrl', function ($scope, $log, $rootScope, ArtistFactory
 
 /* ARTIST (SINGULAR) CONTROLLER */
 
-juke.controller('ArtistCtrl', function ($scope, $log, ArtistFactory, PlayerFactory, $rootScope) {
+juke.controller('ArtistCtrl', function ($scope, $log, $stateParams, ArtistFactory, PlayerFactory, $rootScope) {
 
   $scope.$on('viewSwap', function (event, data) {
 

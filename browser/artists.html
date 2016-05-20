@@ -1,0 +1,8 @@
+<div ng-show="true"> 
+    <h3>Artists</h3>
+            <div class="list-group">
+              <div class="list-group-item" ng-repeat="artist in artists">
+              <a ui-sref="ArtistsCtrl({id:artist.id})" ng-click="viewOneArtist(artist)">{{ artist.name }}</a>
+            </div>
+          </div>
+</div>
